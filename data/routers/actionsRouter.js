@@ -36,27 +36,27 @@ router.delete('/:id', (req, res) => {
 	ActionsDb.remove(id)
 		.then(action => {
 			if (action) {
-				res.status(200).json({ Message: 'Project Deleted', id });
+				res.status(200).json({ Message: 'action Deleted', id });
 			}
 		})
 		.catch(err => {
 			console.log(err);
-			res.status(500).json({ error: 'unable to delete project' });
+			res.status(500).json({ error: 'unable to delete action' });
 		});
 });
 
-//   update,
-// router.put('/:id', (req, res) => {
-// 	const { id } = req.params;
-// 	const { name, description } = req.body;
-// 	ActionsDb.update(id, { name, description })
-// 		.then(project => {
-// 			res.status(200).json({ project });
-// 		})
-// 		.catch(err => {
-// 			console.log(err);
-// 			res.status(500).json({ error: 'unable to edit project' });
-// 		});
-// });
+  //update,
+router.put('/:id', (req, res) => {
+	const { id } = req.params;
+	const { notes, description } = req.body;
+	ActionsDb.update(id, { notes, description })
+		.then(action => {
+			res.status(200).json({ action });
+		})
+		.catch(err => {
+			console.log(err);
+			res.status(500).json({ error: 'unable to edit action' });
+		});
+});
 
 module.exports = router;
