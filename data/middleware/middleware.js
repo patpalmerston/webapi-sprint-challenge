@@ -6,7 +6,7 @@ const cors = require('cors');
 //custom global middleware
 function logger(req, res, next) {
 	console.log(
-		`[${new Date().toISOString}] ${req.method} to ${req.url} from ${req.get(
+		`[${new Date().toISOString()}] ${req.method} to ${req.url} from ${req.get(
 			'Origin'
 		)}`
 	);
