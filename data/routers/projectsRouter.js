@@ -34,14 +34,29 @@ router.post('/', (req, res) => {
 	const { name, description } = req.body;
 	ProjectDb.insert({ name, description })
 		.then(project => {
-			res.status(200).json(project);
+			res.status(201).json(project);
 		})
 		.catch(err => {
 			console.log(err);
 			res.status(500).json({ error: 'unable to make new project' });
 		});
 });
-//   remove,
+
+//   remove, if I use the 204 it does not return a body for the preview in insomnia
+router.delete('/:id', (req, res) => {
+	const { id } = req.params;
+	ProjectDb.remove(id)
+		.then(project => {
+			if (project) {
+				res.status(200).json({ Message: 'Project Deleted', id });
+			}
+		})
+		.catch(err => {
+			console.log(err);
+			res.status(500).json({ error: 'unable to delete project' });
+		});
+});
+
 //   update,
 
 module.exports = router;
