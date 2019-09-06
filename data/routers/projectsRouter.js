@@ -16,6 +16,18 @@ router.get('/', (req, res) => {
 		});
 });
 
+router.get('/:id', (req, res) => {
+	const { id } = req.params;
+	ProjectDb.get(id)
+		.then(project => {
+			res.status(200).json(project);
+		})
+		.catch(err => {
+			console.log(err);
+			res.status().json({ error: 'unable to retrieve that project by id' });
+		});
+});
+
 //   getProjectActions,
 router.get('/:id/actions', (req, res) => {
 	const { id } = req.params;
