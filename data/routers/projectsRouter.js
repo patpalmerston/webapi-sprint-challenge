@@ -16,7 +16,7 @@ router.get('/', (req, res) => {
 		});
 });
 
-router.get('/:id', (req, res) => {
+router.get('/:id', validateProjectId, (req, res) => {
 	const { id } = req.params;
 	ProjectDb.get(id)
 		.then(project => {
@@ -29,7 +29,7 @@ router.get('/:id', (req, res) => {
 });
 
 //   getProjectActions,
-router.get('/:id/actions', (req, res) => {
+router.get('/:id/actions', validateProjectId, (req, res) => {
 	const { id } = req.params;
 	ProjectDb.getProjectActions(id)
 		.then(actions => {
@@ -42,7 +42,7 @@ router.get('/:id/actions', (req, res) => {
 });
 
 //   insert,
-router.post('/', (req, res) => {
+router.post('/', validateProject, (req, res) => {
 	const { name, description } = req.body;
 	ProjectDb.insert({ name, description })
 		.then(project => {
@@ -55,7 +55,7 @@ router.post('/', (req, res) => {
 });
 
 //   remove, if I use the 204 it does not return a body for the preview in insomnia
-router.delete('/:id', (req, res) => {
+router.delete('/:id', validateProjectId, (req, res) => {
 	const { id } = req.params;
 	ProjectDb.remove(id)
 		.then(project => {
@@ -70,7 +70,7 @@ router.delete('/:id', (req, res) => {
 });
 
 //   update,
-router.put('/:id', (req, res) => {
+router.put('/:id', validateProjectId, (req, res) => {
 	const { id } = req.params;
 	const { name, description } = req.body;
 	ProjectDb.update(id, { name, description })
@@ -82,5 +82,28 @@ router.put('/:id', (req, res) => {
 			res.status(500).json({ error: 'unable to edit project' });
 		});
 });
+
+function validateProjectId(req, res, next) {
+	let projectId = req.params.id;
+
+	ProjectDb.get(projectId).then(project => {
+		if (project === null || project.length === 0) {
+			res.status(400).json({ message: 'invalid project id' });
+		} else {
+			req.project = project;
+			next();
+		}
+	});
+}
+
+function validateProject(req, res, next) {
+	if (!req.body) {
+		res.status(400).json({ message: 'missing user data' });
+	} else if (!req.body.name || !req.body.description) {
+		res.status(400).json({ message: 'Please Add name and Description' });
+	} else {
+		next();
+	}
+}
 
 module.exports = router;

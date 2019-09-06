@@ -17,7 +17,7 @@ router.get('/', (req, res) => {
 });
 
 //   insert,
-router.post('/', (req, res) => {
+router.post('/', validateAction, (req, res) => {
 	
 	const { project_id, notes, description } = req.body;
 	ActionsDb.insert({ project_id, notes, description })
@@ -58,5 +58,16 @@ router.put('/:id', (req, res) => {
 			res.status(500).json({ error: 'unable to edit action' });
 		});
 });
+
+// middleware to validate action
+function validateAction(req, res, next) {
+	if (!req.body.project_id) {
+		res.status(400).json({ message: 'please add project id' });
+	} else if (!req.body.notes || !req.body.description) {
+		res.status(400).json({ message: 'please add description and notes' });
+	} else {
+		next();
+	}
+}
 
 module.exports = router;
