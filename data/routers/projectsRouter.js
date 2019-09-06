@@ -14,10 +14,23 @@ router.get('/', (req, res) => {
 			console.log(err);
 			res.status().json({ error: 'unable to get project info' });
 		});
-});
+  });
+
+//   getProjectActions,
+router.get('/:id/actions', (req, res) => {
+  const {id} = req.params
+  ProjectDb.getProjectActions(id)
+    .then(actions => {
+      res.status(200).json(actions)
+    })
+    .catch(err => {
+      console.log(err)
+      res.status(500).json({error: 'unable to retrieve action info'})
+    })
+})
+
 //   insert,
 //   update,
 //   remove,
-//   getProjectActions,
 
 module.exports = router;
