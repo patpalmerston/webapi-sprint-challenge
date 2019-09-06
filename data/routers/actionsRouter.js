@@ -7,8 +7,8 @@ const router = express.Router();
 //   get,
 router.get('/', (req, res) => {
 	ActionsDb.get()
-		.then(project => {
-			res.status(200).json(project);
+		.then(action => {
+			res.status(200).json(action);
 		})
 		.catch(err => {
 			console.log(err);
@@ -21,8 +21,8 @@ router.post('/', (req, res) => {
 	
 	const { project_id, notes, description } = req.body;
 	ActionsDb.insert({ project_id, notes, description })
-		.then(project => {
-			res.status(201).json(project);
+		.then(action => {
+			res.status(201).json(action);
 		})
 		.catch(err => {
 			console.log(err);
@@ -30,20 +30,20 @@ router.post('/', (req, res) => {
 		});
 });
 
-//   remove, if I use the 204 it does not return a body for the preview in insomnia
-// router.delete('/:id', (req, res) => {
-// 	const { id } = req.params;
-// 	ActionsDb.remove(id)
-// 		.then(project => {
-// 			if (project) {
-// 				res.status(200).json({ Message: 'Project Deleted', id });
-// 			}
-// 		})
-// 		.catch(err => {
-// 			console.log(err);
-// 			res.status(500).json({ error: 'unable to delete project' });
-// 		});
-// });
+
+router.delete('/:id', (req, res) => {
+	const { id } = req.params;
+	ActionsDb.remove(id)
+		.then(action => {
+			if (action) {
+				res.status(200).json({ Message: 'Project Deleted', id });
+			}
+		})
+		.catch(err => {
+			console.log(err);
+			res.status(500).json({ error: 'unable to delete project' });
+		});
+});
 
 //   update,
 // router.put('/:id', (req, res) => {
